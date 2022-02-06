@@ -39,6 +39,8 @@ public class PedidoController {
 		
 		repository.save(pedido);
 		
-		return "pedido/formulario";
+		return "redirect:/home";
+		//Method.POST usa-se redirect
+		//Method.GET usa-se forward
 	}
 }
