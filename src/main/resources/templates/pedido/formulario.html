@@ -11,7 +11,7 @@
 		<div th:replace="~{base :: titulo('Novo pedido')}"></div>
 		
 		<div class="card mt-3">
-			<form th:object="${requisicaoNovoPedido}" class="card-body" action="/pedido/novo" method="POST">
+			<form th:object="${requisicaoNovoPedido}" class="card-body" th:action="@{/pedido/novo}" method="POST">
 				<div class="form-group">
 					<label for="nomeProduto">Produto *</label>
 					<!-- th:field="*{nomeProduto}", faz com que o Thymeleaf gerencie todo o input dando name, id e value -->

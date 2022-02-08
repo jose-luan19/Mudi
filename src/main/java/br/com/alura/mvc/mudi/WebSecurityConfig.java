@@ -1,19 +1,22 @@
 package br.com.alura.mvc.mudi;
 
-import org.springframework.context.annotation.Bean;
+import javax.sql.DataSource;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
+	@Autowired
+	private DataSource dataSource;
+	
 	//Função que diz que todas as requisições precisam estar com um usuario autenticado 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -22,19 +25,30 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				//.antMatchers("/", "/home").permitAll() parte do codigo que deixaria a homepage sem necessidade de autenticação 
 				.anyRequest().authenticated()
 			.and()
-				.httpBasic();
+			.formLogin(form -> form
+				.loginPage("/login")
+				.defaultSuccessUrl("/home",true)
+				.permitAll()
+			)
+			.logout(logout -> logout.logoutUrl("/logout"))
+			.csrf().disable();
 	}
 	
-	@Bean
 	@Override
-	public UserDetailsService userDetailsService() {
-		UserDetails user =
-			 User.withDefaultPasswordEncoder()//função @deprecated pouca segurança 
-				.username("luan")
-				.password("1960")
-				.roles("ADM")
-				.build();
-
-		return new InMemoryUserDetailsManager(user);
+	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+		
+		auth.jdbcAuthentication()
+			.dataSource(dataSource)
+			.passwordEncoder(encoder);
+			//.withUser(user);
+	
+//		UserDetails user =
+//				 User.builder() 
+//					.username("liz")
+//					.password(encoder.encode("6019"))
+//					.roles("ADM")
+//					.build();
 	}
+	
 }
