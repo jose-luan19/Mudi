@@ -4,11 +4,10 @@ import java.security.Principal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -32,32 +31,14 @@ public class HomeController {
 	@GetMapping
 	public ModelAndView home(Principal principal) {
 		
-//		List<Pedido> pedidos = repository.recuperaTodosOsPedidos();
-		List<Pedido> pedidos = repository.findAllByUsuario(principal.getName());
+		Sort sort = Sort.by("dataDaEntrega").descending();
+		PageRequest paginacao = PageRequest.of(0, 3, sort);
 		
-//		model.addAttribute("pedidos", pedidos);
-//		
-//		return "home";
-		
+		List<Pedido> pedidos = repository.findByStatus(StatusPedido.ENTREGUE, paginacao);
+			
 		ModelAndView mv = new ModelAndView("home");
 	    mv.addObject("pedidos", pedidos);
 	    return mv; 
-	}
-	
-	@GetMapping("/{status}")
-	public String pageStatus(@PathVariable("status") String status, Model model) {
-		//@PathVariable("status"): Notação para que o spring pegue a variavel no path ou url nesse caso
-		List<Pedido> pedidos = repository.findByStatus(StatusPedido.valueOf(status.toUpperCase()));
-		//valueOf(): metodo para transformar uma string em um enum
-		model.addAttribute("pedidos", pedidos);
-		model.addAttribute("status", status);
-		return "home"; 
-	}
-	
-	//Metodo para que quando haja um erro, não seja mostrado toda a exception na tela
-	@ExceptionHandler(IllegalArgumentException.class)
-	public String onError() {
-		return "redirect:/home";
 	}
 	
 }

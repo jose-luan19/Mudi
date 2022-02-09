@@ -22,15 +22,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http
 			.authorizeRequests()
+				.antMatchers("/home/**")
+					.permitAll()
 				//.antMatchers("/", "/home").permitAll() parte do codigo que deixaria a homepage sem necessidade de autenticação 
 				.anyRequest().authenticated()
 			.and()
 			.formLogin(form -> form
 				.loginPage("/login")
-				.defaultSuccessUrl("/home",true)
+				.defaultSuccessUrl("/usuario/pedido",true)
 				.permitAll()
 			)
-			.logout(logout -> logout.logoutUrl("/logout"))
+			.logout(logout -> {
+				logout.logoutUrl("/logout")
+					.logoutSuccessUrl("/home");
+				})
 			.csrf().disable();
 	}
 	

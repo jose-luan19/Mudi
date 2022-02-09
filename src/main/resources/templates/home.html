@@ -6,36 +6,12 @@
 	<div th:replace="~{base :: logo}"></div>
 
 	<div class="container">
-		<div th:replace="~{base :: titulo('Meus pedidos')}"></div>
-		
-		<nav class="navbar navbar-expand navbar-light bg-light d-flex justify-content-between mb-3">
-			<div class="collapse navbar-collapse" id="navbarSupportedContent">
-				<ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                	<li class="nav-item">
-                    	<a th:classappend="${status}== null ? 'active'" class="nav-link" aria-current="page" href="/home">Todos</a>
-                    </li>
-                    <li class="nav-item">
-                    	<a th:classappend="${status}=='aguardando'?'active'" class="nav-link" href="/home/aguardando">Aguardando</a>
-                    </li>
-                    <li class="nav-item">
-                    	<a th:classappend="${status}=='aprovado'?'active'" class="nav-link" href="/home/aprovado" tabindex="-1" aria-disabled="true">Aprovado</a>
-                    </li>
-                    <li class="nav-item">
-                    	<a th:classappend="${status}=='entregue'?'active'" class="nav-link" href="/home/entregue" tabindex="-1" aria-disabled="true">Entregue</a>
-                    </li>
-                </ul>
-			</div>
-			<a href="/pedido/formulario"><button class="btn btn-outline-secondary me-md-2">Novo</button></a>
-		</nav>
-	
+		<div th:replace="~{base :: titulo('Últimos pedidos')}"></div>
+
 		<!-- Itera em cima da lista 'pedidos', como se fosse um forEach -->
-		<div class="card mb-4" th:each="pedido: ${pedidos}">
-			<th:block th:switch="${#strings.toString(pedido.status)}">
-				<div th:case="'AGUARDANDO'" class="card-header alert-warning" th:text="${pedido.nomeProduto}">Nome do produto</div>
-				<div th:case="'ENTREGUE'" class="card-header alert-success" th:text="${pedido.nomeProduto}">Nome do produto</div>
-				<div th:case="'APROVADO'" class="card-header alert-dark" th:text="${pedido.nomeProduto}">Nome do produto</div>
-			<th:block/>
-			
+		<div class="card mb-4 mt-2" th:each="pedido: ${pedidos}">
+			<div class="card-header alert-success" th:text="${pedido.nomeProduto}">Nome do produto</div>
+
 			<div class="card-body">
 				<div class="row">
 					<!-- Conteudo -->
