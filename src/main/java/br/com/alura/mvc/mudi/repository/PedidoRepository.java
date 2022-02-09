@@ -18,7 +18,7 @@ public interface PedidoRepository extends JpaRepository<Pedido, Long>{
 	
 	public List<Pedido> findAll();
 	
-	@Cacheable(value="pedidos")
+	@Cacheable(value="pedidos") 
 	public List<Pedido> findByStatus(StatusPedido status, Pageable paginacao);
 	
 	@Query("SELECT p FROM Pedido p JOIN p.user u WHERE u.username = :username ")
