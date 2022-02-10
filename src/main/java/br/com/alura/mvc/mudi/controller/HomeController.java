@@ -4,6 +4,7 @@ import java.security.Principal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
@@ -28,6 +29,7 @@ public class HomeController {
 	@Autowired
 	private PedidoRepository repository;
 	
+	@Cacheable(value="pedidos_home") 
 	@GetMapping
 	public ModelAndView home(Principal principal) {
 		

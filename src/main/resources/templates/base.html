@@ -40,11 +40,12 @@
 			<form id="form-login" th:action="@{/logout}" method="post"></form>
 		</span>
 	</div>
-	<div class="row" sec:authorize="isAuthenticated()">
+	<div sec:authorize="isAuthenticated()">
 		<div class="col">
 			<nav class="nav">
 				<a class="nav-link" th:href="@{/home}">Home</a>
 				<a class="nav-link" th:href="@{/usuario/pedido}">Meus pedidos</a>
+				<a class="nav-link" th:href="@{/oferta}">Faça sua oferta</a>
 			</nav>
 		</div>	
 	</div>
