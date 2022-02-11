@@ -23,4 +23,5 @@ A aplicação serve para que pessoas façam requisições de produtos que querem
 
 ## Tela de enviar ofertas para os pedidos
 
-![imagem_2022-02-10_211127](https://user-images.githubusercontent.com/54694573/153518353-cebf822f-2862-4f37-ac93-7bf6e8f3b07d.png)
+![imagem_2022-02-10_211336](https://user-images.githubusercontent.com/54694573/153518534-f2577d82-58d3-4327-9f88-8cbfe7176e7e.png)
+
