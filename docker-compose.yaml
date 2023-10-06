@@ -3,47 +3,43 @@ version: '3.8'
 services:
   # Serviço para o banco de dados MySQL
   mysql:
-    build:
-      context: ./docker-db/
+    image: mysql:5.7
     restart: always
     ports:
       - "4000:3306"
     networks:
-      - mudi
-    env_file:
-      - docker-db/db.env
-#    volumes:
-#      - ./docker-db/schema.sql:/docker-entrypoint-initdb.d/init.sql
-#      - db_data:/var/lib/mysql
+      - db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: mudi
 
 
   # Serviço para a aplicação Spring Boot
   spring-app:
-    build:
-      context: ./  # Diretório onde está o Dockerfile da aplicação Spring Boot
+    build: ./
     restart: always
     ports:
       - "8080:8080"
     depends_on:
       - mysql
     networks:
-      - mudi
+      - db
+#      - front
     volumes:
       - ./src:/app/src
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/mudi?serverTimezone=UTC
-      - SPRING_DATASOURCE_USERNAME=root
-      - SPRING_DATASOURCE_PASSWORD=root
-      - SPRING_DATASOURCE_TESTWHILEIDLE=false
-      - SPRING_DATASOURCE_VALIDATIONQUERY=SELECT 1
-      - SPRING_JPA_SHOWSQL=true
-      - SPRING_JPA_PROPERTIES_HIBERNATE_FORMATSQL=true
-      - SPRING_JPA_HIBERNATE_DDLAUTO=update
-      - SPRING_JPA_HIBERNATE_NAMINGSTRATEGY=org.hibernate.cfg.ImprovedNamingStrategy
-      - SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT=org.hibernate.dialect.MySQL5InnoDBDialect
-      - SPRING.DEVTOOLS.RESTART.ENABLED=true
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/mudi?serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      SPRING_DATASOURCE_TESTWHILEIDLE: false
+      SPRING_DATASOURCE_VALIDATIONQUERY: SELECT 1
+      SPRING_JPA_SHOWSQL: true
+      SPRING_JPA_PROPERTIES_HIBERNATE_FORMATSQL: true
+      SPRING_JPA_HIBERNATE_DDLAUTO: update
+      SPRING_JPA_HIBERNATE_NAMINGSTRATEGY: org.hibernate.cfg.ImprovedNamingStrategy
+      SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.MySQL5InnoDBDialect
+      SPRING.DEVTOOLS.REMOTE.SECRET: 123
 
 networks:
-  mudi:
-#volumes:
-#  db_data:
+  db:
+#  front:

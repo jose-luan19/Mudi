@@ -21,5 +21,6 @@ COPY --from=build /app/target/*.jar .
 EXPOSE 8080
 
 # Comando para iniciar a aplicação Spring Boot
-CMD  ["java", "-Dspring.devtools.restart.enabled=true", "-jar", "mudi-0.0.1-SNAPSHOT.jar"]
+#ENTRYPOINT ["java", "-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=5005","-jar", "mudi-0.0.1-SNAPSHOT.jar"]
+CMD  ["java", "-jar", "mudi-0.0.1-SNAPSHOT.jar"]
 #CMD ["sleep", "infinity"]
