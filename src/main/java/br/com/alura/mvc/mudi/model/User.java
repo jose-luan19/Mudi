@@ -45,6 +45,13 @@ public class User {
 	public void setEnabled(Boolean enabled) {
 		this.enabled = enabled;
 	}
-	
-	
+
+	public User() {
+	}
+
+	public User(String username, String password, Boolean enabled) {
+		this.username = username;
+		this.password = password;
+		this.enabled = enabled;
+	}
 }
