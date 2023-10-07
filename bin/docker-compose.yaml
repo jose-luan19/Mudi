@@ -3,22 +3,26 @@ version: '3.8'
 services:
   # Serviço para o banco de dados MySQL
   mysql:
-    image: mysql:5.7
+    build:
+      context: ./docker-db/
     restart: always
     ports:
       - "4000:3306"
     networks:
-      - db
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: mudi
+      - back
     volumes:
-      - db_data:/var/lib/mysql
+      - ./docker-db/schema.sql:/docker-entrypoint-initdb.d/init.sql
+#      - db_data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: /run/secrets/db_password
+    secrets:
+      - db_password
 
 
   # Serviço para a aplicação Spring Boot
   spring-app:
-    build: ./
+    build:
+      context: ./  # Diretório onde está o Dockerfile da aplicação Spring Boot
     restart: always
     ports:
       - "8080:8080"
@@ -26,12 +30,14 @@ services:
     depends_on:
       - mysql
     networks:
-      - db
-#      - front
+      - back
+      - front
+    volumes:
+      - ./src:/app/src
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/mudi?serverTimezone=UTC
       SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: root
+      SPRING_DATASOURCE_PASSWORD: /run/secrets/db_password
       SPRING_DATASOURCE_TESTWHILEIDLE: false
       SPRING_DATASOURCE_VALIDATIONQUERY: SELECT 1
       SPRING_JPA_SHOWSQL: true
@@ -39,11 +45,15 @@ services:
       SPRING_JPA_HIBERNATE_DDLAUTO: update
       SPRING_JPA_HIBERNATE_NAMINGSTRATEGY: org.hibernate.cfg.ImprovedNamingStrategy
       SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.MySQL5InnoDBDialect
-      SPRING.PROFILES.ACTIVE: dev
-      SPRING.DEVTOOLS.REMOTE.SECRET: 123
+      SPRING.DEVTOOLS.RESTART.ENABLED: true
+    secrets:
+      - db_password
+secrets:
+  db_password:
+    file: password.txt
 
 networks:
-  db:
-#  front:
-volumes:
-  db_data: {}
+  back:
+  front:
+#volumes:
+#  db_data:

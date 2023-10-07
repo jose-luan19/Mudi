@@ -82,7 +82,6 @@
 				</configuration>
 			</plugin>
 		</plugins>
-		<finalName>mudi</finalName>
 	</build>
 
 </project>
