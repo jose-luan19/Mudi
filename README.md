@@ -25,3 +25,19 @@ A aplicação serve para que pessoas façam requisições de produtos que querem
 
 ![imagem_2022-02-10_211336](https://user-images.githubusercontent.com/54694573/153518534-f2577d82-58d3-4327-9f88-8cbfe7176e7e.png)
 
+
+# Para executar a aplicação com docker, basta abrir o terminal na raiz do projeto e executar:
+``` console
+docker compose up
+```
+
+## E você ainda pode conectar sua IDE para remotedebug na porta 5005
+
+## São criados automaticamente dois usuarios para teste:
+### admin
+usename: admin
+password: admin
+### user
+usename: user
+password: user
+
