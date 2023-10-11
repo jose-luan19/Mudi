@@ -8,6 +8,7 @@ import br.com.alura.mvc.mudi.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -31,8 +32,13 @@ public class Seed {
         }
     }
     public void seedUsers() {
-        User admin = new User("admin", "$2a$10$EdFWbQWVcWM.SrROF2LiReu1wFa8eiQWmRcdg8z3jsK0MGmE.g05i",true);
-        User user = new User("user", "$2a$10$qY2fK2csl97tM3r1BFKES.OMJr7aT8szt9KYMeEbi2omHf4s33FZe",true);
+        BCryptPasswordEncoder crypt = new BCryptPasswordEncoder();
+
+        String senhaAdmin = crypt.encode("admin");
+        String senhaUser = crypt.encode("user");
+
+        User admin = new User("admin", senhaAdmin,true);
+        User user = new User("user", senhaUser,true);
 
         userRepository.save(admin);
         userRepository.save(user);
