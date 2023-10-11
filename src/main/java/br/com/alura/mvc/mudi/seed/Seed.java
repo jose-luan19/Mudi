@@ -23,8 +23,12 @@ public class Seed {
 
     @EventListener
     public void seed(ContextRefreshedEvent event) {
-        seedUsers();
-        seedAuthorities();
+        if (userRepository.getOne("admin") == null) {
+            seedUsers();
+        }
+        if (authoritiesRepository.getOne(1L) == null) {
+            seedAuthorities();
+        }
     }
     public void seedUsers() {
         User admin = new User("admin", "$2a$10$EdFWbQWVcWM.SrROF2LiReu1wFa8eiQWmRcdg8z3jsK0MGmE.g05i",true);
